@@ -25,7 +25,7 @@ from player.parser import *
 from base.whiteboard import Whiteboard
 
 '''
-quality_id - Taxa em que o video foi codificado (46980bps, ..., 4726737bps) 
+quality_id - Taxa em que o video foi codificado (46980bps, ..., 4726737bps)
 qi         - indice de qualidade normalizado
 segment_id - número de sequência do arquivo de video
 
@@ -292,7 +292,7 @@ class Player(SimpleModule):
             measured_throughput = msg.get_bit_length() / (time.perf_counter() - self.request_time)
             self.throughput.add(current_time, measured_throughput)
 
-            print(f'Execution Time {self.timer.get_current_time()} > measured throughput: {measured_throughput}')
+            print(f'Execution Time {self.timer.get_current_time()} > measured throughput: {self.human_format(measured_throughput)}')
 
             # self.throughput.add(current_time, msg.get_bit_length() /(current_time - self.request_time))
             self.buffering_video_segment(msg)
@@ -318,6 +318,14 @@ class Player(SimpleModule):
             self.kill_playback_thread = True
             if self.playback_thread.is_alive():
                 self.playback_thread.join()
+
+    def human_format(self, num):
+            magnitude = 0
+            while abs(num) >= 1000:
+                magnitude += 1
+                num /= 1000.0
+            # add more suffixes if you need them
+            return '%.2f%s' % (num, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
 
     def __multiplication_factor(self, values: list):
         units = ['Bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps']
