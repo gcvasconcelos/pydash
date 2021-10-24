@@ -16,16 +16,17 @@ class R2ABOLA(IR2A):
     def __init__(self, id):
         IR2A.__init__(self, id)
         self.segment_size = []          # S
-        self.control_parameter = 0.0    # V
-        self.gamma = 0.0                # g
+        self.control_parameter = 0.0    # V (tradeoff between the buffer size and the performance objectives)
+        self.gamma = 0.0                # g (corresponds to how strongly we want to avoid rebuffering)
 
     # Auxiliary methods
-    def log_utility_function(self, bitrate_index): # v
+    def log_utility_function(self, bitrate_index): # v (related to quality and bitrate)
         # bitrate_index = m
         return math.log(self.segment_size[bitrate_index]/self.segment_size[0])
 
     def optimal_solution(self,bitrate_index):
         # bitrate_index = m
+        
         # Get Q = Buffer level
         buffer_level = Whiteboard.get_instance().get_amount_video_to_play()
 
@@ -34,16 +35,16 @@ class R2ABOLA(IR2A):
 
     def quality_index(self):    # Choose the bitrate that maximize the optimal_solution
         # Initialize variables
-        optimal_solution_max = -math.inf
+        optimal_value_max = -math.inf
         bitrate_index_selected = None
 
         # Choose the bitrate that maximize the optimal_solution
         for bitrate_index in range(0, len(self.segment_size) - 1):
-            optimal_solution = self.optimal_solution(bitrate_index)
+            optimal_value = self.optimal_solution(bitrate_index)
 
-            if optimal_solution_max <= optimal_solution:
+            if optimal_value_max <= optimal_value:
                 bitrate_index_selected = bitrate_index
-                optimal_solution_max = optimal_solution
+                optimal_value_max = optimal_value
 
         return bitrate_index_selected
 
@@ -77,10 +78,10 @@ class R2ABOLA(IR2A):
         log_utility_max = self.log_utility_function(len(self.segment_size) - 1)
 
         # Calculate gamma
-        self.gamma = ((buffer_size_max - 1) * (self.log_utility_function(0) * self.segment_size[1] - self.log_utility_function(1) * self.segment_size[0]) - 2 * log_utility_max * (self.segment_size[1] - self.segment_size[0])) / (1 * (self.segment_size[1] - self.segment_size[0]) * (2 - buffer_size_max - 1))
+        self.gamma = ((buffer_size_max - 1) * (self.log_utility_function(0) * self.segment_size[1] - self.log_utility_function(1) * self.segment_size[0]) - 2 * log_utility_max * (self.segment_size[1] - self.segment_size[0])) / ((self.segment_size[1] - self.segment_size[0]) * (1 - buffer_size_max))
 
         # Calculate control parameter
-        self.control_parameter = (buffer_size_max - 1) / (log_utility_max + self.gamma * 1)
+        self.control_parameter = (buffer_size_max - 1) / (log_utility_max + self.gamma)
 
         # Print results
         print('Buffer Size Max', buffer_size_max)
