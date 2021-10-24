@@ -10,7 +10,7 @@ class R2A_MovingAverageThroughput(IR2A):
         IR2A.__init__(self, id)
         self.throughputs = []
         self.request_time = 0
-        self.window_size = 10
+        self.window_size = 5
         self.qi = []
 
     def handle_xml_request(self, msg):
@@ -31,7 +31,7 @@ class R2A_MovingAverageThroughput(IR2A):
 
     def handle_segment_size_request(self, msg):
         # get the last window to calculate average throughput
-        moving_avg = mean(self.throughputs[-self.window_size:]) / 2
+        moving_avg = mean(self.throughputs[-self.window_size:]) * 0.7
 
         selected_qi = self.qi[0]
         for i in self.qi:

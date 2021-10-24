@@ -113,32 +113,33 @@ class R2A_TBOA(IR2A):
         elif buffer_level <= self.buffer_high:
             last_qi = self.selected_qis[-1]
 
+            selected_qi = last_qi
+
             if last_qi != self.selected_qis[19]:
-                next_qi = self.qi(self.qi.index(last_qi)+1)
+                next_qi = self.qi[self.qi.index(last_qi)+1]
+                buffer_delta = buffer_level - last_buffer_level
+
                 # double checking if next quality will be supported by
                 # throughput
-                if next_qi <= estimated_throughput:
-                    buffer_delta = buffer_level - last_buffer_level
-                    if buffer_delta > 0:
-                        selected_qi = next_qi
-            else:
-                selected_qi = last_qi
+                if (next_qi <= estimated_throughput and
+                    buffer_delta > 0):
+                    selected_qi = next_qi
+
         # keep maximum possible quality
         elif buffer_level > self.buffer_high:
+
             # waiting time is calculated to avoid buffer overflow but this is
             # ignored in this implementation, since the pydash algorithm
             # already deals with this issue
             last_qi = self.selected_qis[-1]
             waiting_time = (buffer_level - self.buffer_low -
                 (last_qi * self.playback_step)/ self.qi[0])
-
             if waiting_time > 0:
                 # time.sleep(waiting_time)
-                selected_qi = self.max_possible_quality(
-                    estimated_throughput, buffer_level, self.buffer_low)
-            else:
-                selected_qi = self.max_possible_quality(
-                    estimated_throughput, buffer_level, self.buffer_low)
+                pass
+
+            selected_qi = self.max_possible_quality(
+                estimated_throughput, buffer_level, self.buffer_low)
 
         self.selected_qis.append(selected_qi)
 
