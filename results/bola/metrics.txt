@@ -1,0 +1,7 @@
+Pauses number: 0
+Average QI: 5.55
+  >> Standard deviation: 1.12
+  >> Variance: 1.25
+Average QI distance: 0.33
+  >> Standard deviation: 0.59
+  >> Variance: 0.35
