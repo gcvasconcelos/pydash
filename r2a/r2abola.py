@@ -45,7 +45,7 @@ class R2ABOLA(IR2A):
                 bitrate_index_selected = bitrate_index
                 optimal_solution_max = optimal_solution
 
-        return bitrate_index           
+        return bitrate_index_selected           
 
     # R2A methods
     def handle_xml_request(self, msg):
