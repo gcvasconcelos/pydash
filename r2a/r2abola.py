@@ -16,7 +16,7 @@ class R2ABOLA(IR2A):
     def __init__(self, id):
         IR2A.__init__(self, id)
         self.segment_size = []          # S
-        self.control_parameter = 0.0    # V (tradeoff between the buffer size and the performance objectives)
+        self.control_parameter = 0.0    # V (related to the buffer size and the performance objectives)
         self.gamma = 0.0                # g (corresponds to how strongly we want to avoid rebuffering)
 
     # Auxiliary methods
