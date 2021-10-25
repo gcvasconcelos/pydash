@@ -1,3 +1,9 @@
+# Teleinformática e Redes 2
+# Trabalho Final
+# Integrantes:
+## Luis Filipe Campos Cardoso (19/0100079)
+## Gabriel Vasconcelos (16/0120781)
+## Alexander Matheus de Melo Lima (12/0108534)
 from r2a.ir2a import IR2A
 from player.parser import *
 import time
@@ -31,7 +37,7 @@ class R2A_MovingAverageThroughput(IR2A):
 
     def handle_segment_size_request(self, msg):
         # get the last window to calculate average throughput
-        moving_avg = mean(self.throughputs[-self.window_size:]) * 0.7
+        moving_avg = mean(self.throughputs[-self.window_size:]) / 2
 
         selected_qi = self.qi[0]
         for i in self.qi:

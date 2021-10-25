@@ -83,11 +83,11 @@ class R2ABOLA(IR2A):
         self.control_parameter = (buffer_size_max - 1) / (log_utility_max + self.gamma * 1)
 
         # Print results
-        print('Buffer Size Max', buffer_size_max)
-        print('Logarithmic Utility Max', log_utility_max)
-        print('Qualities: ', self.qi)
-        print('Control Parameter (Performance weight): ', self.control_parameter)
-        print('Gamma (Smoothness weight): ', self.gamma)
+        # print('Buffer Size Max', buffer_size_max)
+        # print('Logarithmic Utility Max', log_utility_max)
+        # print('Qualities: ', self.qi)
+        # print('Control Parameter (Performance weight): ', self.control_parameter)
+        # print('Gamma (Smoothness weight): ', self.gamma)
 
         # Send the mesg to the upper layer (Player)
         self.send_up(msg)

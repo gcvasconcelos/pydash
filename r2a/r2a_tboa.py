@@ -1,3 +1,10 @@
+# Teleinformática e Redes 2
+# Trabalho Final
+# Integrantes:
+## Luis Filipe Campos Cardoso (19/0100079)
+## Gabriel Vasconcelos (16/0120781)
+## Alexander Matheus de Melo Lima (12/0108534)
+
 from r2a.ir2a import IR2A
 from player.parser import *
 import time
@@ -18,9 +25,9 @@ class R2A_TBOA(IR2A):
 
         # TBOA parameters
         self.smooth_coeffiecient = 0.8
-        self.buffer_min = 5
-        self.buffer_low = 10
-        self.buffer_high = 25
+        self.buffer_min = 10
+        self.buffer_low = 15
+        self.buffer_high = 35
 
     def handle_xml_request(self, msg):
         self.request_time = time.perf_counter()
@@ -115,7 +122,8 @@ class R2A_TBOA(IR2A):
 
             selected_qi = last_qi
 
-            if last_qi != self.selected_qis[19]:
+            # check if is not the best quality yet
+            if last_qi != self.qi[19]:
                 next_qi = self.qi[self.qi.index(last_qi)+1]
                 buffer_delta = buffer_level - last_buffer_level
 
@@ -143,14 +151,6 @@ class R2A_TBOA(IR2A):
 
         self.selected_qis.append(selected_qi)
 
-
-        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        print(f'BUFFER LEVEL \t {buffer_level}')
-        print(f'SELECTED QI \t {self.human_format(selected_qi)}')
-        print(f'EST THROUGHPUT \t {self.human_format(estimated_throughput)}')
-        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-
-        # pdb.set_trace()
         msg.add_quality_id(selected_qi)
 
         self.request_time = time.perf_counter()
