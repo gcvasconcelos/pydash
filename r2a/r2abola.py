@@ -33,7 +33,7 @@ class R2ABOLA(IR2A):
         # Solve optimal solution
         return (self.control_parameter * (self.log_utility_function(bitrate_index) + self.gamma) - buffer_level) / self.segment_size[bitrate_index]
 
-    def quality_index(self):    # Choose the bitrate that maximize the optimal_solution
+    def quality_selection(self):    # Choose the bitrate that maximize the optimal_solution
         # Initialize variables
         optimal_value_max = -math.inf
         bitrate_index_selected = None
@@ -55,7 +55,7 @@ class R2ABOLA(IR2A):
 
     def handle_segment_size_request(self, msg):
         # Get quality of the video (bitrate)
-        quality = self.quality_index()
+        quality = self.quality_selection()
 
         # Add quality to the video segment
         msg.add_quality_id(self.segment_size[quality])
