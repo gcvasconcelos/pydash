@@ -20,33 +20,33 @@ class R2ABOLA(IR2A):
         self.gamma = 0.0                # g (corresponds to how strongly we want to avoid rebuffering)
 
     # Auxiliary methods
-    def log_utility_function(self, bitrate_index): # v (related to quality and bitrate)
-        # bitrate_index = m
-        return math.log(self.segment_size[bitrate_index]/self.segment_size[0])
+    def log_utility_function(self, bitrate): # v (related to quality and bitrate)
+        # bitrate = m
+        return math.log(self.segment_size[bitrate]/self.segment_size[0])
 
-    def optimal_solution(self,bitrate_index):
-        # bitrate_index = m
+    def optimal_solution(self,bitrate):
+        # bitrate = m
         
         # Get Q = Buffer level
         buffer_level = Whiteboard.get_instance().get_amount_video_to_play()
 
         # Solve optimal solution
-        return (self.control_parameter * (self.log_utility_function(bitrate_index) + self.gamma) - buffer_level) / self.segment_size[bitrate_index]
+        return (self.control_parameter * (self.log_utility_function(bitrate) + self.gamma) - buffer_level) / self.segment_size[bitrate]
 
     def quality_selection(self):    # Choose the bitrate that maximize the optimal_solution
         # Initialize variables
         optimal_value_max = -math.inf
-        bitrate_index_selected = None
+        bitrate_selected = None
 
         # Choose the bitrate that maximize the optimal_solution
-        for bitrate_index in range(0, len(self.segment_size) - 1):
-            optimal_value = self.optimal_solution(bitrate_index)
+        for bitrate in range(0, len(self.segment_size) - 1):
+            optimal_value = self.optimal_solution(bitrate)
 
             if optimal_value_max <= optimal_value:
-                bitrate_index_selected = bitrate_index
+                bitrate_selected = bitrate
                 optimal_value_max = optimal_value
 
-        return bitrate_index_selected
+        return bitrate_selected
 
     # R2A methods
     def handle_xml_request(self, msg):
